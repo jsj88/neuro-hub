@@ -1,0 +1,39 @@
+# AI-Powered Meta-Analysis Toolkit Dependencies
+
+# Core meta-analysis libraries
+nimare>=0.2.0
+pymare>=0.0.5
+
+# Neuroimaging
+nilearn>=0.10.0
+nibabel>=5.0.0
+
+# AI/LLM integration
+anthropic>=0.18.0
+openai>=1.0.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# PDF processing
+pypdf>=3.0.0
+pdfplumber>=0.9.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Search/retrieval
+biopython>=1.81
+requests>=2.28.0
+
+# Utilities
+pyyaml>=6.0
+pydantic>=2.0.0
+tqdm>=4.65.0
+
+# Jupyter
+jupyterlab>=4.0.0
+ipywidgets>=8.0.0

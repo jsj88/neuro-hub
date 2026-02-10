@@ -10,9 +10,14 @@ neuro-hub/
 │   ├── behavior/      # Behavioral paradigms (T-maze, open field, fear conditioning)
 │   ├── imaging/       # Calcium imaging, fMRI, optical methods
 │   └── ephys/         # Electrophysiology, spike sorting, LFP analysis
+├── meta-analysis/     # AI-powered meta-analysis toolkit (NEW)
+│   ├── core/          # Data models (Study, Coordinate, EffectSize)
+│   ├── extraction/    # AI-powered data extraction
+│   ├── analysis/      # NiMARE (ALE) and PyMARE wrappers
+│   └── notebooks/     # Jupyter workflow templates
 ├── papers/            # Paper notes and extracted methods
 ├── scripts/           # Reusable analysis code
-└── skills/            # Claude Code skill definitions
+└── resources/         # Reference materials and curated lists
 ```
 
 ## Usage with Claude Code
@@ -45,3 +50,27 @@ Paper notes follow this format:
 2. Extract relevant methods to appropriate `methods/` subdirectory
 3. Save paper notes to `papers/`
 4. Clone or save code to `scripts/`
+
+## Meta-Analysis Toolkit
+
+AI-powered meta-analysis for neuroscience research.
+
+### Features
+- **AI Paper Screening**: LLM screens abstracts using inclusion/exclusion criteria
+- **AI Data Extraction**: Extract brain coordinates and effect sizes from papers
+- **Coordinate-Based Meta-Analysis**: ALE/MKDA via NiMARE
+- **Effect Size Meta-Analysis**: Random effects models via PyMARE
+- **Visualization**: Brain maps, forest plots, funnel plots
+
+### Quick Start
+
+```bash
+cd meta-analysis
+pip install -r requirements.txt
+
+# In Python
+from core import Study, Coordinate, MetaAnalysisDataset
+from analysis.coordinate_based import ALEAnalysis
+```
+
+See `meta-analysis/README.md` for full documentation.
