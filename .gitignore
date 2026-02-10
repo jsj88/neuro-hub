@@ -36,3 +36,6 @@ data/
 
 # Logs
 *.log
+
+# Cloned reference repos (re-clone as needed)
+resources/awesome-neuroscience/
