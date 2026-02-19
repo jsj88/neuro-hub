@@ -1,0 +1,40 @@
+# T-Maze EEG-fMRI Classification Analysis Toolkit
+# Version 0.2.0
+
+# Core scientific stack
+numpy>=1.20.0
+pandas>=1.3.0
+scipy>=1.7.0
+scikit-learn>=1.0.0
+
+# Neuroimaging
+mne>=1.0.0              # EEG/MEG processing
+nilearn>=0.10.0         # fMRI analysis, searchlight
+nibabel>=5.0.0          # NIfTI I/O
+
+# Visualization
+matplotlib>=3.5.0
+seaborn>=0.12.0
+
+# Utilities
+joblib>=1.1.0           # Parallel processing
+tqdm>=4.60.0            # Progress bars
+pyyaml>=6.0             # Config file support
+
+# === New in v0.2.0 ===
+
+# Group statistics
+statsmodels>=0.14.0     # Linear mixed effects, ANOVA
+pingouin>=0.5.0         # Statistical tests, effect sizes
+
+# Deep learning
+torch>=2.0.0            # PyTorch neural networks
+torchvision>=0.15.0     # Vision utilities (optional)
+
+# Connectivity analysis
+networkx>=3.0           # Graph theory metrics
+bctpy>=0.6.0            # Brain Connectivity Toolbox
+
+# Pipeline automation
+pybids>=0.15.0          # BIDS format handling
+jinja2>=3.0.0           # Report template rendering
