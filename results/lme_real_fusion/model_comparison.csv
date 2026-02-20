@@ -1,0 +1,7 @@
+model,formula,re_formula,AIC,BIC,log_likelihood,converged,rpe_coef,rpe_p,description
+rpe_only,rewp ~ rpe,~1,47534.64576596809,47555.593449244865,-23764.322882984045,True,0.053196512247593634,0.5596163706831343,"RPE predicts REWP, random intercept only"
+rpe_random_slope,rewp ~ rpe,~rpe,47538.520152253026,47573.432957714314,-23764.260076126513,True,0.05522217950490895,0.5544182475514359,"RPE predicts REWP, random intercept + slope for RPE"
+rpe_trial,rewp ~ rpe + trial_z,~rpe,47538.198518365316,47580.09388491886,-23763.099259182658,True,0.05524458739232271,0.5532283034024128,"RPE + z-scored trial order, random slope for RPE"
+rpe_outcome,rewp ~ rpe + reward,~rpe,47541.727616329095,47583.62298288264,-23764.863808164548,True,0.10762495709266581,0.5514291705137306,"RPE + reward condition as fixed effects, random slope for RPE"
+rpe_stay_shift,rewp ~ rpe * C(PES_PRS_index),~rpe,47545.478609809914,47608.321659640234,-23763.739304904957,True,-1.0289133786628322,0.48799747697314255,RPE x stay/shift interaction (T-maze specific)
+rpe_velocity,rewp ~ rpe * C(Vel_Cond),~rpe,47547.57942348046,47610.422473310784,-23764.78971174023,True,0.004308004217138402,0.9917519283983837,RPE x velocity condition interaction (T-maze specific)
