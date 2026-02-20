@@ -23,6 +23,7 @@ from .tools.model_fitting import FitModel, ParameterRecovery, CompareModels
 from .tools.neural import RunTemporalDecoding, RunREWP
 from .tools.correlate import CorrelateNeuroModel
 from .tools.plot import PlotAndSave
+from .skills import BehavioralPipeline, NeuralPipeline, NeuroModelFusion, FullPipeline
 from .prompts.system_prompt import build_system_prompt
 
 
@@ -68,6 +69,7 @@ class NeuroCoscientist:
     def _register_default_tools(self):
         """Register all available tools."""
         tool_instances = [
+            # Atomic tools
             SimulateBehavior(),
             SimulateNeural(),
             FitModel(),
@@ -77,6 +79,12 @@ class NeuroCoscientist:
             RunREWP(),
             CorrelateNeuroModel(),
             PlotAndSave(),
+            # Skills (multi-step pipelines)
+            BehavioralPipeline(),
+            NeuralPipeline(),
+            NeuroModelFusion(),
+            FullPipeline(),
+            # Sentinel
             Stop(),
         ]
         for tool in tool_instances:
@@ -166,10 +174,21 @@ class NeuroCoscientist:
         """Dispatch to the named tool, injecting shared state."""
         tool = self.tools[tool_name]
 
-        # Inject shared state for tools that need cross-tool data
+        # Inject shared state for atomic tools that need cross-tool data
         if tool_name in ("RUN_TEMPORAL_DECODING", "RUN_REWP", "CORRELATE_NEURO_MODEL"):
             if "_simulated_data" not in params and "simulated_eeg" in self._shared_state:
                 params["_simulated_data"] = self._shared_state["simulated_eeg"]
+
+        # Inject shared state for skills that need data from prior steps
+        if tool_name == "NEURAL_PIPELINE":
+            if "rpes" not in params and "last_rpes" in self._shared_state:
+                params["rpes"] = self._shared_state["last_rpes"]
+
+        if tool_name == "NEURO_MODEL_FUSION":
+            if "simulated_eeg" not in params and "simulated_eeg" in self._shared_state:
+                params["simulated_eeg"] = self._shared_state["simulated_eeg"]
+            if "rpes" not in params and "last_rpes" in self._shared_state:
+                params["rpes"] = self._shared_state["last_rpes"]
 
         result = tool(params)
 
@@ -178,8 +197,17 @@ class NeuroCoscientist:
             self._shared_state["simulated_eeg"] = tool._last_data
 
         if tool_name == "SIMULATE_BEHAVIOR":
-            # Store the output path for downstream tools
             self._shared_state["last_behavior_csv"] = result
+
+        # Capture shared state from skills
+        if tool_name == "BEHAVIORAL_PIPELINE" and hasattr(tool, '_steps'):
+            # Parse RPEs from the skill's last run (stored in run_direct result)
+            # The string output contains the SkillResult; we also store via tool internals
+            pass
+
+        if tool_name == "NEURAL_PIPELINE" and hasattr(tool, '_sim_tool'):
+            if hasattr(tool._sim_tool, '_last_data') and tool._sim_tool._last_data is not None:
+                self._shared_state["simulated_eeg"] = tool._sim_tool._last_data
 
         return result
 

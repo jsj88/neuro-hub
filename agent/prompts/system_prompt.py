@@ -65,21 +65,40 @@ CSV columns: subject, trial, choice, outcome, [rpe, Q_0, Q_1, ...]
 
 def build_system_prompt(tools: Dict[str, BaseTool]) -> str:
     """Build the full system prompt with tool registry."""
-    tool_blocks = []
-    for name, tool in tools.items():
-        tool_blocks.append(f"### {name}\n{tool.description}")
+    from ..skills.base import BaseSkill
 
-    tools_section = "\n\n".join(tool_blocks)
+    atomic_blocks = []
+    skill_blocks = []
+
+    for name, tool in tools.items():
+        if isinstance(tool, BaseSkill):
+            skill_blocks.append(f"### {name}\n{tool.description}")
+        else:
+            atomic_blocks.append(f"### {name}\n{tool.description}")
+
+    atomic_section = "\n\n".join(atomic_blocks)
+    skill_section = "\n\n".join(skill_blocks)
+
+    skills_guidance = ""
+    if skill_blocks:
+        skills_guidance = (
+            "\n\n## Skills (Multi-Step Pipelines)\n\n"
+            "Skills chain multiple atomic tools into complete pipelines. "
+            "**Prefer skills when the task matches a complete pipeline** — they handle "
+            "data flow between steps automatically.\n\n"
+            f"{skill_section}"
+        )
 
     return f"""{DOMAIN_CONTEXT}
 
-## Available Tools
+## Atomic Tools
 
-{tools_section}
+{atomic_section}
+{skills_guidance}
 
 ## Response Format
 
-Think step-by-step, then call exactly one tool:
+Think step-by-step, then call exactly one tool or skill:
 
 REASONING: <your analysis of what to do next>
 
